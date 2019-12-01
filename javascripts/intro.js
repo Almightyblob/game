@@ -28,7 +28,63 @@ class Box {
     get right(){
         return this.x + this.width;
     }
+    get x_center(){
+         return this.x + this.width * 0.5; 
+    }
+    get y_center(){
+         return this.y + this.height * 0.5; 
+    }
     
+}
+
+class ColBox extends Box {
+    constructor (width, height, x, y, color){
+        super (width, height, x, y, color)
+    }
+
+    collisionDetection(obj){
+            // using early outs cuts back on performance costs
+        if (this.top > obj.bottom || this.right < obj.left || this.bottom < obj.top || this.left > obj.right) {
+            return false;
+        }
+        return true;
+    }
+
+    collisionRessolve(obj) {
+        var vector_x, vector_y;
+        // get the distance between center points
+        vector_x = this.x_center - obj.x_center;
+        vector_y = this.y_center - obj.y_center;
+        console.log(vector_x, vector_y);
+        // is the y vector longer than the x vector?
+        if (vector_y * vector_y > vector_x * vector_x) {// square to remove negatives
+    
+          // is the y vector pointing down?
+          if (vector_y > 0) {
+    
+            obj.y = this.y - this.height;
+            obj.y_velocity = 0;
+            obj.jumping = false;
+          } else { // the y vector is pointing up
+    
+            obj.y = this.y + this.height;
+    
+          }
+    
+        } else { // the x vector is longer than the y vector
+    
+          // is the x vector pointing right?
+          if (vector_x > 0) {
+            obj.x = this.x - obj.width;
+    
+          } else { // the x vector is pointing left
+            obj.x = this.x + this.width;    
+    
+    
+          }
+    
+        }
+    }
 }
 
 class Character extends Box {
@@ -52,7 +108,7 @@ class Character extends Box {
 
 var vadid = new Character (36, 36, 144, 0, "#ff0000", true, 0, 0, 0.5, 0.8, 20);
 var blimsy = new Character (20, 20, 30, 0, "#00ff00", true, 0, 0, 0.3, 0.5, 20);
-var block = new Box(36, 36, 280, 180 - 36, "#606060");
+var block = new ColBox(36, 36, 200, 180 - 36, "#606060");
 
 
 var worldFunctions = {
@@ -170,13 +226,14 @@ function loop(){
         blimsy.color= "#00ff00";
     }
 
-    if (vadid.collisionTest(block)){
-        vadid.x_velocity = 0;
-    }
 
     block.draw();
     vadid.draw();
     blimsy.draw();
+    if (block.collisionDetection(vadid)){
+        block.collisionRessolve(vadid);
+    }
+    
     worldFunctions.checkBounds(vadid);
     worldFunctions.checkBounds(blimsy);
     window.requestAnimationFrame(loop);
