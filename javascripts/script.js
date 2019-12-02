@@ -1,7 +1,7 @@
 var context = document.getElementById("display").getContext("2d");
 
-context.canvas.width = 320;
-context.canvas.height = 180;
+context.canvas.width = 960;
+context.canvas.height = 720;
 
 class Box {
     constructor (width, height, x, y, color){
@@ -48,7 +48,6 @@ class ColBox extends Box {
     }
 
     collisionDetection(obj){
-            // using early outs cuts back on performance costs
         if (this.top > obj.bottom || this.right < obj.left || this.bottom < obj.top || this.left > obj.right) {
             return false;
         }
@@ -77,15 +76,13 @@ class ColBox extends Box {
           }
     
         } else { // the x vector is longer than the y vector
-    
           // is the x vector pointing right?
           if (difference_x > 0) {
             obj.x = this.x - obj.width;
-    
+            obj.x_velocity = 0;
           } else { // the x vector is pointing left
             obj.x = this.x + this.width;    
-    
-    
+            obj.x_velocity = 0;
           }
     
         }
@@ -93,7 +90,7 @@ class ColBox extends Box {
 }
 
 class Character extends Box {
-    constructor(width, height, x, y, color, jumping, x_velocity, y_velocity, speed, run, jump ){
+    constructor(width, height, x, y, color, jumping, x_velocity, y_velocity, speed, run, jump, carrying ){
         super (width, height, x, y, color);
         this.jumping = jumping;
         this.x_velocity = x_velocity;
@@ -101,6 +98,7 @@ class Character extends Box {
         this.speed = speed;
         this.run = run;
         this.jump = jump;
+        this.carrying = carrying;
      }
      collisionTest(colBox) {
         if (this.top > colBox.bottom || this.right < colBox.left || this.bottom < colBox.top || this.left > colBox.right) {
@@ -109,6 +107,15 @@ class Character extends Box {
             return true;
         }
     }
+    carry(){
+        if (this.carrying){
+            this.color = "#ff00ff";
+            this.jump = 15;
+        }else {
+            this.color = "#ff0000";
+            this.jump = 20;
+        }
+    }   
 }
 
 var worldFunctions = {
@@ -131,12 +138,6 @@ var worldFunctions = {
     
     },
     checkBounds(obj) {
-        if (obj.x > 320){
-            obj.x = -obj.width;
-        }
-        if (obj.x < -obj.width){
-            obj.x = 320;
-        }
         if (obj.x_velocity > -0.05 && obj.x_velocity < 0.05){
             obj.x_velocity = 0;
         }
@@ -150,10 +151,13 @@ var controller = {
     shift: false,
     up: false,
     down: false,
+    reset: false,
+    enabled: true,
+    counter: 0,
     keyListener:function(event) {
         
         var keyState = (event.type == "keydown")? true:false;
-
+    
         switch(event.code) {
             case "KeyW":
                 controller.up = keyState;
@@ -173,18 +177,23 @@ var controller = {
             case "ShiftLeft":
                 controller.shift = keyState;
             break;
+            case "KeyP":
+                controller.reset = keyState;
+            break;
         }
+    },
+    jumpDelay(){
+
+        
     },
     controls(obj){
         if (controller.jump && obj.jumping == false) {
             obj.jumping = true;
             obj.y_velocity -= obj.jump;
         }
-    
         if (controller.left){
             obj.x_velocity -= obj.speed;
         }
-    
         if (controller.right){
             obj.x_velocity += obj.speed;
         }
@@ -196,39 +205,42 @@ var controller = {
             obj.x_velocity += obj.run;
         }
         if (vadid.collisionTest(blimsy) && controller.up){
-            blimsy.exists = false;            
+            obj.carrying = true;
+            blimsy.exists = false;      
         } 
         if (blimsy.exists === false && controller.down){
+            obj.carrying = false;
             blimsy.x = obj.x;
             blimsy.y = obj.y;
-            blimsy.exists = true;
-            
+            blimsy.y_velocity = 0;
+            blimsy.exists = true;   
         }
-    
-        obj.y_velocity += 1.5;
+        if (controller.reset){
+            obj.x = 80;
+            obj.y = 600;
+            blimsy.x = obj.x;
+            blimsy.y = obj.y;
+        }
+        obj.y_velocity += 1.0;
         obj.x += obj.x_velocity;
         obj.y += obj.y_velocity;
         obj.x_velocity *= 0.9;
         obj.y_velocity *= 0.9;
     
-        if (obj.y > 180 - obj.height){
-            obj.jumping = false;
-            obj.y = 180 - obj.height;
-            obj.y_velocity = 0;
-        }
         if (obj.x_velocity > -0.05 && obj.x_velocity < 0.05){
             obj.x_velocity = 0;
         }
     }
 };
 
-var vadid = new Character (36, 36, 144, 0, "#ff0000", true, 0, 0, 0.5, 0.8, 20);
-var blimsy = new Character (20, 20, vadid.x, vadid.y, "#00ff00", true, 0, 0, 0.3, 0.5, 20);
-var block = new ColBox(36, 36, 200, 180 - 36, "#606060");
-var rectangle = new ColBox(36, 70, 240, 120, "#606060");
-var block2 = new ColBox(36, 36, 200, 80 - 36, "#606060");
-var ground = new ColBox(360, 20, 0, 160,"#606060");
-var blimsyArray = [blimsy];
+var vadid = new Character (24, 36, 80, 600, "#ff0000", true, 0, 0, 0.5, 0.8, 20, false);
+var blimsy = new Character (16, 20, vadid.x, vadid.y, "#00ff00", true, 0, 0, 0.3, 0.5, 20, false);
+var long1 = new ColBox(480, 20, 0, 700,"#606060");
+var block1 = new ColBox(36, 52, 320, 700 - 52 - 20, "#606060");
+var rectangle1 = new ColBox(36, 70, 180, 650, "#606060");
+var block2 = new ColBox(36, 36, 560, 650, "#606060");
+var long2 = new ColBox(360, 20, 660, 600,"#606060");
+
 
 function loop(){
 // Movement controls for Vadid and Blimsy
@@ -236,14 +248,19 @@ function loop(){
     worldFunctions.moveBlimsy(blimsy, vadid);
 //Rendering Background
     context.fillStyle = "#202020";
-    context.fillRect(0,0,320,180);
+    context.fillRect(0,0,960,720);
 
-    ground.draw();
-    block.draw();
-    block2.draw()
+    long1.draw();
+    block1.draw();
+    block2.draw();
+    rectangle1.draw();
+    long2.draw();
+
+
     vadid.draw();
-    blimsyArray[0].draw();
-    rectangle.draw();
+    vadid.carry();
+    blimsy.draw();
+    
 
 // Blimsy detecion 
     if (vadid.collisionTest(blimsy)){
@@ -253,28 +270,36 @@ function loop(){
     }
 
 // world collision detection    
-    if (block.collisionDetection(vadid)){
-        block.collisionRessolve(vadid);
+    if (block1.collisionDetection(vadid)){
+        block1.collisionRessolve(vadid);
     }
-    if (block.collisionDetection(blimsy)){
-        block.collisionRessolve(blimsy);
+    if (block1.collisionDetection(blimsy)){
+        block1.collisionRessolve(blimsy);
     }
-    if (rectangle.collisionDetection(vadid)){
-        rectangle.collisionRessolve(vadid);
+    if (rectangle1.collisionDetection(vadid)){
+        rectangle1.collisionRessolve(vadid);
     }
     if (block2.collisionDetection(vadid)){
         block2.collisionRessolve(vadid);
     }
-    if (rectangle.collisionDetection(blimsy)){
-        rectangle.collisionRessolve(blimsy);
+    if (block2.collisionDetection(blimsy)){
+        block2.collisionRessolve(blimsy);
     }
-    if (ground.collisionDetection(vadid)){
-        ground.collisionRessolve(vadid);
+    if (rectangle1.collisionDetection(blimsy)){
+        rectangle1.collisionRessolve(blimsy);
     }
-    if (ground.collisionDetection(blimsy)){
-        ground.collisionRessolve(blimsy);
+    if (long1.collisionDetection(vadid)){
+        long1.collisionRessolve(vadid);
     }
-
+    if (long1.collisionDetection(blimsy)){
+        long1.collisionRessolve(blimsy);
+    }
+    if (long2.collisionDetection(vadid)){
+        long2.collisionRessolve(vadid);
+    }
+    if (long2.collisionDetection(blimsy)){
+        long2.collisionRessolve(blimsy);
+    }
     worldFunctions.checkBounds(vadid);
     worldFunctions.checkBounds(blimsy);
     window.requestAnimationFrame(loop);
