@@ -1,3 +1,61 @@
+@import url('https://fonts.googleapis.com/css?family=Permanent+Marker|Quicksand&display=swap');
+
+html {
+    background: #6ed4ff;
+}
+
+.content {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+h1 {
+    font-family: "Permanent Marker";
+    font-size: 76px;
+    color: #5e0025;
+    margin: 0;
+    width: 100%;
+    text-align: center;   
+    margin-top: 50px;
+}
+
+.spacer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+h2 {
+    font-family: "Permanent Marker";
+    font-size: 36px;
+    width: 100%;
+    color: #5e0025;
+}
+
+p, ul {
+    font-family: "Quicksand";
+    font-size: 18px;
+}
+
+button {
+    font-family: "Quicksand";
+    font-size: 16px;
+    font-weight: 700;
+    padding: 5px 10px;
+    border: solid 2px #5e0025;
+    border-radius: 5px;
+    background: none;
+    margin-top: 20px;
+}
+
 canvas {
-    border: 1px solid red;
+    margin-top: 50px;
+    border: solid 10px white;
+}
+
+.end-text {
+    width: 100%;
+    text-align: center;
 }

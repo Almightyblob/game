@@ -3,19 +3,29 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <meta ht tp-equiv="X-UA-Compatible" content="ie=edge">
         <title>Canvas Basics</title>
 
         <link rel="stylesheet" href="css/style.css">
     </head>
     <body>
-        <!-- the magic happens inside this tag - 
-            it's HTML5 tag that supports animation -->
-        <canvas id="display" width="300" height="300"></canvas>
-         
-        <!-- include js file after DOM is loaded; 
-            if included earlier, you have to use window.onload = function(){ ... } 
-            approach in your intro.js file -->
-        <script src="javascripts/script.js"></script>
+        <div class="content">
+            <h1>VADID and BLIMSY</h1>
+            <p>Oh no! Vadid and Blimsy fell through a magical portal! Can you help them find their way home? </p>
+            <div class="spacer">
+                <div class="controls">
+                    <h2>Controls</h2>
+                    <ul>
+                        <li>A: Left</li>
+                        <li>D: Right</li>
+                        <li>W: Pick up Blimsy</li>
+                        <li>S: Drop Blimsy</li>
+                        <li>Space: Jump</li>
+                        <li>P: Reset Game</li>
+                    </ul>
+                </div>
+            </div>
+            <button onclick="window.location.href = './game.html'">START GAME</button>
+        </div>
     </body>
 </html>
