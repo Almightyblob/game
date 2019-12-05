@@ -4,6 +4,11 @@ html {
     background: #6ed4ff;
 }
 
+.intro {
+    width: 50%;
+
+}
+
 .content {
     display: flex;
     flex-wrap: wrap;
