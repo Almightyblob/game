@@ -341,6 +341,7 @@ function loop(){
     }
     
 // world collision detection    
+
     if (block0.collisionDetection(vadid)){
         block0.collisionRessolve(vadid);
     }
