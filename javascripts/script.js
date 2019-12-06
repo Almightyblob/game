@@ -213,6 +213,8 @@ var controller = {
         if (controller.jump && obj.jumping == false) {
             obj.jumping = true;
             obj.y_velocity -= obj.jump;
+            var audio = new Audio("../assets/jump.wav");
+            audio.play();
         }
         if (controller.left){
             obj.x_velocity -= obj.speed;
@@ -311,7 +313,6 @@ texture.src = "../assets/texture2.PNG";
 
 var img = new Image();
 img.src = "../assets/bg.jpg";
-
 
 function loop(){
 // Movement controls for Vadid and Blimsy
