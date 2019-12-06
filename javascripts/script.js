@@ -305,7 +305,6 @@ var block23 = new ExitBox(36, 48, 924 - 36, 354 - 48, "##fef5e6");
 var block24 = new ColBox(36, 720, -36, 0, "#fef5e6");
 var block25 = new ColBox(36, 720, 960, 0, "#fef5e6");
 
-
 var img = new Image();
 img.src = "../assets/bg.jpg";
 
@@ -369,7 +368,7 @@ function loop(){
     } else {
         blimsy.color= "#1705b5";
     }
-
+    
 // world collision detection    
     if (block0.collisionDetection(vadid)){
         block0.collisionRessolve(vadid);
