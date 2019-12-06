@@ -3,6 +3,9 @@ var context = document.getElementById("display").getContext("2d");
 context.canvas.width = 960;
 context.canvas.height = 720;
 
+var texture = new Image();
+texture.src = "../assets/texture2.PNG";
+
 class Box {
     constructor (width, height, x, y, color){
         this.width = width;
@@ -19,8 +22,15 @@ class Box {
         context.fillRect(this.x, this.y, this.width, this.height);
     } else {
         return;
-    }       
+        }       
     }
+    drawTexture(){
+        context.fillStyle = context.createPattern(texture, "repeat");
+        context.beginPath();
+        context.fillRect(this.x, this.y, this.width, this.height);
+    }
+
+
     get bottom(){
         return this.y + this.height;
     }
@@ -128,10 +138,10 @@ class Character extends Box {
     }
     carry(){
         if (this.carrying){
-            this.color = "#ff00ff";
+            this.color = "#920b99";
             this.jump = 15;
         }else {
-            this.color = "#ff0000";
+            this.color = "#b50505";
             this.jump = 20;
         }
     }   
@@ -250,50 +260,54 @@ var controller = {
     }
 };
 
-var vadid = new Character (24, 36, 80, 720 - 24 - 48, "#ff0000", true, 0, 0, 0.5, 0.8, 20, false);
-var blimsy = new Character (16, 20, vadid.x, vadid.y, "#0000ff", true, 0, 0, 0.2, 0.5, 20, false);
+var vadid = new Character (24, 36, 80, 720 - 24 - 48, "#b50505", true, 0, 0, 0.5, 0.8, 20, false);
+var blimsy = new Character (16, 20, vadid.x, vadid.y, "#1705b5", true, 0, 0, 0.2, 0.5, 20, false);
 
-var long0 = new ColBox(480, 24, 0, 720 - 24,"#138217");
-var long1 = new ColBox(480, 24, 660, 600,"#138217");
-var long2 = new ColBox(480, 24, 80, 540,"#138217");
+var long0 = new ColBox(480, 24, 0, 720 - 24,"#306b35");
+var long1 = new ColBox(480, 24, 660, 600,"#306b35");
+var long2 = new ColBox(480, 24, 80, 540,"#306b35");
 
-var thin0 = new ColBox(100, 24, 550, 208, "#138217");
-var thin1 = new ColBox(100, 24, 626, 256, "#138217");
-var thin2 = new ColBox(100, 24, 726, 256, "#138217");
+var thin0 = new ColBox(100, 24, 550, 208, "#306b35");
+var thin1 = new ColBox(100, 24, 626, 256, "#306b35");
+var thin2 = new ColBox(100, 24, 726, 256, "#306b35");
 
-var medium0 = new ColBox(320, 24, 140, 540 - 24 - 20,"#138217");
-var medium1 = new ColBox(320, 24, 140, 160,"#138217");
-var medium2 = new ColBox(240, 24, 610, 160,"#138217");
-var medium3 = new ColBox(240, 24, 570, 304,"#138217");
-var medium4 = new ColBox(240, 24, 720, 354,"#138217");
+var medium0 = new ColBox(320, 24, 140, 540 - 24 - 20,"#306b35");
+var medium1 = new ColBox(320, 24, 140, 160,"#306b35");
+var medium2 = new ColBox(240, 24, 610, 160,"#306b35");
+var medium3 = new ColBox(240, 24, 570, 304,"#306b35");
+var medium4 = new ColBox(240, 24, 720, 354,"#306b35");
 
-var block0 = new ColBox(36, 48, 180, 720 - 24 - 48, "#138217");
-var block1 = new ColBox(36, 48, 320, 720 - 48 - 24 - 20, "#138217");
-var block2 = new ColBox(36, 36, 560, 650, "#138217");
-var block3 = new ColBox(36, 48, 720, 600 - 48 - 20, "#138217");
-var block4 = new ColBox(36, 36, 840, 600 -36, "#138217");
-var block5 = new ColBox(36, 36, 650, 480, "#138217");
-var block6 = new ColBox(36, 48, 460, 540 - 48 - 20, "#138217");
-var blockLong0 = new ColBox(36, 144, 160 - 36, 540 - 144 - 20, "#138217");
-var block7 = new ColBox(36, 36, 300, 420, "#138217");
-var block8 = new ColBox(36, 36, 380, 360, "#138217");
-var block9 = new ColBox(36, 36, 300, 280, "#138217");
-var block10 = new ColBox(36, 36, 0, 486, "#138217");
-var block11 = new ColBox(36, 36, 124 -36, 430, "#138217");
-var block12 = new ColBox(36, 36, 0, 380, "#138217");
-var block13 = new ColBox(36, 36, 124 -36, 330, "#138217");
-var block14 = new ColBox(36, 36, 0, 280, "#138217");
-var block15 = new ColBox(36, 36, 124 -36, 230, "#138217");
-var block16 = new ColBox(36, 48, 550, 160, "#138217");
-var block17 = new ColBox(36, 48, 670, 160 + 24, "#138217");
-var block18 = new ColBox(36, 48, 570, 256, "#138217");
-var block19 = new ColBox(36, 48, 826 - 36, 256 - 48, "#138217");
-var block20 = new ColBox(36, 68, 850 - 36, 160 - 68, "#138217");
-var block21 = new ColBox(36, 68, 960 - 36, 354 - 68, "#138217");
-var block22 = new ColBox(36, 48, 70, 720 - 24 - 48, "#ffffff");
-var block23 = new ExitBox(36, 48, 924 - 36, 354 - 48, "##ffffff");
-var block24 = new ColBox(36, 720, -36, 0, "#ffffff");
-var block25 = new ColBox(36, 720, 960, 0, "#ffffff");
+var block0 = new ColBox(36, 48, 180, 720 - 24 - 48, "#306b35");
+var block1 = new ColBox(36, 48, 320, 720 - 48 - 24 - 20, "#306b35");
+var block2 = new ColBox(36, 36, 560, 650, "#306b35");
+var block3 = new ColBox(36, 48, 720, 600 - 48 - 20, "#306b35");
+var block4 = new ColBox(36, 36, 840, 600 -36, "#306b35");
+var block5 = new ColBox(36, 36, 650, 480, "#306b35");
+var block6 = new ColBox(36, 48, 460, 540 - 48 - 20, "#306b35");
+var blockLong0 = new ColBox(36, 144, 160 - 36, 540 - 144 - 20, "#306b35");
+var block7 = new ColBox(36, 36, 300, 420, "#306b35");
+var block8 = new ColBox(36, 36, 380, 360, "#306b35");
+var block9 = new ColBox(36, 36, 300, 280, "#306b35");
+var block10 = new ColBox(36, 36, 0, 486, "#306b35");
+var block11 = new ColBox(36, 36, 124 -36, 430, "#306b35");
+var block12 = new ColBox(36, 36, 0, 380, "#306b35");
+var block13 = new ColBox(36, 36, 124 -36, 330, "#306b35");
+var block14 = new ColBox(36, 36, 0, 280, "#306b35");
+var block15 = new ColBox(36, 36, 124 -36, 230, "#306b35");
+var block16 = new ColBox(36, 48, 550, 160, "#306b35");
+var block17 = new ColBox(36, 48, 670, 160 + 24, "#306b35");
+var block18 = new ColBox(36, 48, 570, 256, "#306b35");
+var block19 = new ColBox(36, 48, 826 - 36, 256 - 48, "#306b35");
+var block20 = new ColBox(36, 68, 850 - 36, 160 - 68, "#306b35");
+var block21 = new ColBox(36, 68, 960 - 36, 354 - 68, "#306b35");
+var block22 = new ColBox(36, 48, 70, 720 - 24 - 48, "#fef5e6");
+var block23 = new ExitBox(36, 48, 924 - 36, 354 - 48, "##fef5e6");
+var block24 = new ColBox(36, 720, -36, 0, "#fef5e6");
+var block25 = new ColBox(36, 720, 960, 0, "#fef5e6");
+
+
+var img = new Image();
+img.src = "../assets/bg.jpg";
 
 function loop(){
 // Movement controls for Vadid and Blimsy
@@ -302,44 +316,45 @@ function loop(){
 //Rendering Background
     context.fillStyle = "#29a9ff";
     context.fillRect(0,0,960,720);
+    context.drawImage(img, -750, -100);
 
-    thin0.draw();
-    thin1.draw();
-    thin2.draw();
+    thin0.drawTexture();
+    thin1.drawTexture();
+    thin2.drawTexture();
 
-    long0.draw();
-    long1.draw();
-    long2.draw();
+    long0.drawTexture();
+    long1.drawTexture();
+    long2.drawTexture();
 
-    medium0.draw();
-    medium1.draw();
-    medium2.draw();
-    medium3.draw();
-    medium4.draw();
+    medium0.drawTexture();
+    medium1.drawTexture();
+    medium2.drawTexture();
+    medium3.drawTexture();
+    medium4.drawTexture();
 
-    block0.draw();
-    block1.draw();
-    block2.draw();
-    block3.draw();
-    block4.draw();
-    block5.draw();
-    block6.draw();
-    blockLong0.draw();
-    block7.draw();
-    block8.draw();
-    block9.draw();
-    block10.draw();
-    block11.draw();
-    block12.draw();
-    block13.draw();
-    block14.draw();
-    block15.draw();
-    block16.draw();
-    block17.draw();
-    block18.draw();
-    block19.draw();
-    block20.draw();
-    block21.draw();
+    block0.drawTexture();
+    block1.drawTexture();
+    block2.drawTexture();
+    block3.drawTexture();
+    block4.drawTexture();
+    block5.drawTexture();
+    block6.drawTexture();
+    blockLong0.drawTexture();
+    block7.drawTexture();
+    block8.drawTexture();
+    block9.drawTexture();
+    block10.drawTexture();
+    block11.drawTexture();
+    block12.drawTexture();
+    block13.drawTexture();
+    block14.drawTexture();
+    block15.drawTexture();
+    block16.drawTexture();
+    block17.drawTexture();
+    block18.drawTexture();
+    block19.drawTexture();
+    block20.drawTexture();
+    block21.drawTexture();
     block22.draw();
     block23.draw();
 
@@ -350,9 +365,9 @@ function loop(){
 
 // Blimsy detecion 
     if (vadid.collisionTest(blimsy)){
-        blimsy.color= "#ffff00";
+        blimsy.color= "#d7db00";
     } else {
-        blimsy.color= "#0000ff";
+        blimsy.color= "#1705b5";
     }
 
 // world collision detection    
