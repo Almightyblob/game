@@ -3,9 +3,6 @@ var context = document.getElementById("display").getContext("2d");
 context.canvas.width = 960;
 context.canvas.height = 720;
 
-var texture = new Image();
-texture.src = "../assets/texture2.PNG";
-
 class Box {
     constructor (width, height, x, y, color){
         this.width = width;
@@ -141,7 +138,7 @@ class Character extends Box {
             this.color = "#920b99";
             this.jump = 15;
         }else {
-            this.color = "#b50505";
+            this.color = "#910d0d";
             this.jump = 20;
         }
     }   
@@ -260,10 +257,10 @@ var controller = {
     }
 };
 
-var vadid = new Character (24, 36, 80, 720 - 24 - 48, "#b50505", true, 0, 0, 0.5, 0.8, 20, false);
-var blimsy = new Character (16, 20, vadid.x, vadid.y, "#1705b5", true, 0, 0, 0.2, 0.5, 20, false);
+var vadid = new Character (24, 36, 80, 720 - 24 - 48, "#910d0d", true, 0, 0, 0.5, 0.8, 20, false);
+var blimsy = new Character (16, 20, vadid.x, vadid.y, "#201296", true, 0, 0, 0.2, 0.5, 20, false);
 
-var long0 = new ColBox(480, 24, 0, 720 - 24,"#306b35");
+var long0 = new ColBox(480, 48, 0, 720 - 24,"#306b35");
 var long1 = new ColBox(480, 24, 660, 600,"#306b35");
 var long2 = new ColBox(480, 24, 80, 540,"#306b35");
 
@@ -305,55 +302,28 @@ var block23 = new ExitBox(36, 48, 924 - 36, 354 - 48, "##fef5e6");
 var block24 = new ColBox(36, 720, -36, 0, "#fef5e6");
 var block25 = new ColBox(36, 720, 960, 0, "#fef5e6");
 
+var collisionArray = [long0, long1, long2, thin0, thin1, thin2, medium0, medium1, medium2, medium3, medium4, 
+    block0, block1, block2, block3, block4, block5, block6, blockLong0, block7, block8, block9, block10, block11,
+    block12, block13, block14, block15, block16, block17, block18, block19, block20, block21, block24, block25];
+    
+var texture = new Image();
+texture.src = "../assets/texture2.PNG";
+
 var img = new Image();
 img.src = "../assets/bg.jpg";
+
 
 function loop(){
 // Movement controls for Vadid and Blimsy
     controller.controls(vadid);
     worldFunctions.moveBlimsy(blimsy, vadid);
 //Rendering Background
-    context.fillStyle = "#29a9ff";
-    context.fillRect(0,0,960,720);
     context.drawImage(img, -750, -100);
 
-    thin0.drawTexture();
-    thin1.drawTexture();
-    thin2.drawTexture();
+    for(let i = 0; i < collisionArray.length; i++){
+        collisionArray[i].drawTexture();
+    }
 
-    long0.drawTexture();
-    long1.drawTexture();
-    long2.drawTexture();
-
-    medium0.drawTexture();
-    medium1.drawTexture();
-    medium2.drawTexture();
-    medium3.drawTexture();
-    medium4.drawTexture();
-
-    block0.drawTexture();
-    block1.drawTexture();
-    block2.drawTexture();
-    block3.drawTexture();
-    block4.drawTexture();
-    block5.drawTexture();
-    block6.drawTexture();
-    blockLong0.drawTexture();
-    block7.drawTexture();
-    block8.drawTexture();
-    block9.drawTexture();
-    block10.drawTexture();
-    block11.drawTexture();
-    block12.drawTexture();
-    block13.drawTexture();
-    block14.drawTexture();
-    block15.drawTexture();
-    block16.drawTexture();
-    block17.drawTexture();
-    block18.drawTexture();
-    block19.drawTexture();
-    block20.drawTexture();
-    block21.drawTexture();
     block22.draw();
     block23.draw();
 
@@ -364,9 +334,9 @@ function loop(){
 
 // Blimsy detecion 
     if (vadid.collisionTest(blimsy)){
-        blimsy.color= "#d7db00";
+        blimsy.color= "#d6c01a";
     } else {
-        blimsy.color= "#1705b5";
+        blimsy.color= "#201296";
     }
     
 // world collision detection    
