@@ -1,8 +1,10 @@
 var context = document.getElementById("display").getContext("2d");
 
+// Canvas Size
 context.canvas.width = 960;
 context.canvas.height = 720;
 
+// Primtive box
 class Box {
     constructor (width, height, x, y, color){
         this.width = width;
@@ -49,6 +51,7 @@ class Box {
     
 }
 
+// Collision Box
 class ColBox extends Box {
     constructor (width, height, x, y, color){
         super (width, height, x, y, color)
@@ -95,6 +98,7 @@ class ColBox extends Box {
     }
 }
 
+// Exit box, to exit the current Level
 class ExitBox extends Box {
     constructor (width, height, x, y, color){
         super (width, height, x, y, color)
@@ -115,6 +119,7 @@ class ExitBox extends Box {
     }
 }
 
+// Subclass for Vadid and Blimsy
 class Character extends Box {
     constructor(width, height, x, y, color, jumping, x_velocity, y_velocity, speed, run, jump, carrying ){
         super (width, height, x, y, color);
@@ -144,7 +149,8 @@ class Character extends Box {
     }   
 }
 
-var worldFunctions = {
+// Movement controller objects
+var blimsyController = {
     moveBlimsy(obj, player){
 
         var target = player.x + (player.width / 4);
@@ -161,12 +167,11 @@ var worldFunctions = {
         obj.y += obj.y_velocity;
         obj.x_velocity *= 0.9;
         obj.y_velocity *= 0.9;
-    
-    },
-    checkBounds(obj) {
+        
         if (obj.x_velocity > -0.05 && obj.x_velocity < 0.05){
             obj.x_velocity = 0;
         }
+    
     },
 };
 
@@ -259,6 +264,7 @@ var controller = {
     }
 };
 
+// all game elements
 var vadid = new Character (24, 36, 80, 720 - 24 - 48, "#910d0d", true, 0, 0, 0.5, 0.8, 20, false);
 var blimsy = new Character (16, 20, vadid.x, vadid.y, "#201296", true, 0, 0, 0.2, 0.5, 20, false);
 
@@ -304,44 +310,49 @@ var block23 = new ExitBox(36, 48, 924 - 36, 354 - 48, "##fef5e6");
 var block24 = new ColBox(36, 720, -36, 0, "#fef5e6");
 var block25 = new ColBox(36, 720, 960, 0, "#fef5e6");
 
+// Array of collision blocks,
 var collisionArray = [long0, long1, long2, thin0, thin1, thin2, medium0, medium1, medium2, medium3, medium4, 
     block0, block1, block2, block3, block4, block5, block6, blockLong0, block7, block8, block9, block10, block11,
     block12, block13, block14, block15, block16, block17, block18, block19, block20, block21, block24, block25];
-    
+
+// Ground texture
 var texture = new Image();
 texture.src = "../assets/texture2.PNG";
 
+// Background image
 var img = new Image();
 img.src = "../assets/bg.jpg";
 
 function loop(){
-// Movement controls for Vadid and Blimsy
+// Calling movement controls for Vadid and Blimsy
     controller.controls(vadid);
-    worldFunctions.moveBlimsy(blimsy, vadid);
-//Rendering Background
+    blimsyController.moveBlimsy(blimsy, vadid);
+    
+// Rendering Background
     context.drawImage(img, -750, -100);
 
     for(let i = 0; i < collisionArray.length; i++){
         collisionArray[i].drawTexture();
     }
 
+// Rendering Special blocks
     block22.draw();
     block23.draw();
 
+// Rendering Characters and check for "carry" state
     vadid.draw();
     vadid.carry();
     blimsy.draw();
     
 
-// Blimsy detecion 
+// Blimsy pick-up detection 
     if (vadid.collisionTest(blimsy)){
         blimsy.color= "#d6c01a";
     } else {
         blimsy.color= "#201296";
     }
     
-// world collision detection    
-
+// World collision detection (does not work properly in a loop!)    
     if (block0.collisionDetection(vadid)){
         block0.collisionRessolve(vadid);
     }
@@ -552,8 +563,8 @@ function loop(){
     if (thin2.collisionDetection(blimsy)){
         thin2.collisionRessolve(blimsy);
     }
-    worldFunctions.checkBounds(vadid);
-    worldFunctions.checkBounds(blimsy);
+
+// Looping back to beginning of game loop
     window.requestAnimationFrame(loop);
 }
 
